@@ -1,5 +1,7 @@
 package cl.nisum.userchallenge.vo;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
@@ -15,4 +17,7 @@ public class UserVO {
 	
 	@JsonProperty("password")
 	private String password;
+	
+	@JsonProperty("phones")
+	private List<PhoneVO> phones;
 }
