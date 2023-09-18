@@ -1,15 +1,14 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '2.7.15'
+	id 'org.springframework.boot' version '2.7.2'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id "com.palantir.docker" version "0.22.1"
+	id 'jacoco'
 }
 
 group = 'cl.nisum'
 version = '0.0.1-SNAPSHOT'
-
-java {
-	sourceCompatibility = '1.8'
-}
+sourceCompatibility = '1.8'
 
 configurations {
 	compileOnly {
@@ -19,6 +18,21 @@ configurations {
 
 repositories {
 	mavenCentral()
+}
+
+task unpack(type: Copy) {
+    dependsOn bootJar
+    from(zipTree(tasks.bootJar.outputs.files.singleFile))
+    into("build/dependency")
+}
+
+docker {
+	println "Docker Result -> user-challenge-app:latest"
+	name "user-challenge-app:latest"
+	tag "User-App", "user-challenge-app:latest"
+	dockerfile file("docker/Dockerfile")
+	copySpec.from(tasks.unpack.outputs).into("dependency")
+	buildArgs(['DEPENDENCY': "dependency"])
 }
 
 dependencies {
@@ -41,6 +55,35 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+}
+
+jacoco {
+	toolVersion = "0.8.8"
+	reportsDir = file("$buildDir/jacoco")
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		html.enabled true
+		html.destination file("$buildDir/jacoco")
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it,
+				exclude: ['**/utils/**',
+					'**/dto/**',
+					'**/vo/**',
+					'**/security/**'
+				]
+			)
+		}))
+	}
+	dependsOn test
+}
+
+test {
+	finalizedBy jacocoTestReport
 }
 
 tasks.named('test') {

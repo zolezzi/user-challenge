@@ -26,6 +26,7 @@ import cl.nisum.userchallenge.dto.UserDTO;
 import cl.nisum.userchallenge.entity.User;
 import cl.nisum.userchallenge.exception.UserChallengeException;
 import cl.nisum.userchallenge.mapper.Mapper;
+import cl.nisum.userchallenge.repository.PhoneRepository;
 import cl.nisum.userchallenge.repository.UserRepository;
 import cl.nisum.userchallenge.service.impl.UserServiceImpl;
 import cl.nisum.userchallenge.utils.TokenUtils;
@@ -60,6 +61,9 @@ public class UserServiceTest {
 	
 	@Mock
 	private UserRepository repository;
+	
+	@Mock
+	private PhoneRepository phoneRepository;
 
 	@Mock
 	private TokenUtils tokenUtil;
@@ -78,7 +82,7 @@ public class UserServiceTest {
 	
 	@Before
 	public void setUp(){
-		service = new UserServiceImpl(repository, validator, mapper, tokenUtil);
+		service = new UserServiceImpl(repository, phoneRepository, validator, mapper, tokenUtil);
 		when(repository.findOneByEmail(eq(EMAIL))).thenReturn(Optional.empty());
 		when(repository.findOneByEmail(eq(EMAIL_FOUND))).thenReturn(Optional.of(user));
 		when(aNewUser.getEmail()).thenReturn(EMAIL);
