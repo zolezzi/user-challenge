@@ -2,6 +2,7 @@ package cl.nisum.userchallenge.utils;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,8 @@ public class TokenUtils {
 	public String createToken(String username) {
 		long expirationTime = JWT_TOKEN_VALIDITY * 1000;
 		Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
-		Map<String, Object> claims = Map.of("name", username);
+		Map<String, Object> claims =  new HashMap<String, Object>();
+		claims.put("name", username);
 		return Jwts.builder()
 				.setSubject(username)
 				.setExpiration(expirationDate)
