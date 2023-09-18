@@ -9,7 +9,7 @@ spring:
       matching-strategy: "ant-path-matcher"
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:heroes;MODE=MySQL
+    url: jdbc:h2:mem:users;MODE=MySQL
     platform: h2
 
   jpa:
@@ -28,7 +28,6 @@ jwt:
   validaty: 18000
 
 regex:
-  #email:  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.
   email: '[a-zA-Z0-9-_.]+@[a-zA-Z0-9-_.]+.cl'
   password:
     value: '(?=.*[0-9])(?=.*[a-z])(?=.*\d)(?=.*[#$@!%&*?]).{8,}'
