@@ -15,7 +15,6 @@ import javax.persistence.TemporalType;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
@@ -42,7 +41,7 @@ public class User {
 	private Date create;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modify", nullable=false)
+	@Column(name="modify")
 	private Date modify;
 	
 	@Temporal(TemporalType.TIMESTAMP)
